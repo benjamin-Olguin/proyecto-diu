@@ -56,8 +56,8 @@ export function WeeklyBookingCalendar() {
       date.setDate(startOfWeek.getDate() + i)
       weekDays.push({
         date: date.toISOString().split("T")[0],
-        label: date.toLocaleDateString("en-US", { weekday: "short", day: "numeric" }),
-        fullLabel: date.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" }),
+        label: date.toLocaleDateString("es-ES", { weekday: "short", day: "numeric" }),
+        fullLabel: date.toLocaleDateString("es-ES", { weekday: "long", month: "short", day: "numeric" }),
       })
     }
     return weekDays
@@ -98,13 +98,13 @@ export function WeeklyBookingCalendar() {
       loadData()
 
       toast({
-        title: "Booking Confirmed",
-        description: `You've successfully booked the ${timeSlot.startTime} - ${timeSlot.endTime} slot.`,
+        title: "Inscripcion aceptada",
+        description: `Te has inscrito exitosamente a la clase del bloque ${timeSlot.startTime} - ${timeSlot.endTime} .`,
       })
     } catch (error) {
       toast({
-        title: "Booking Failed",
-        description: "There was an error processing your booking. Please try again.",
+        title: "Error en la inscripción",
+        description: " Ha ocurrido un error al procesar tu inscripcion. Por favor intentelo de nuevo",
         variant: "destructive",
       })
     } finally {
@@ -164,7 +164,7 @@ export function WeeklyBookingCalendar() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 <Calendar className="h-5 w-5" />
-                Weekly Schedule
+               Horario semanal
               </CardTitle>
               <CardDescription>View and book available gym slots for the week</CardDescription>
             </div>

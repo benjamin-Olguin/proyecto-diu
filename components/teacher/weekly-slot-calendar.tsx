@@ -74,8 +74,8 @@ export function WeeklySlotCalendar() {
       date.setDate(startOfWeek.getDate() + i)
       weekDays.push({
         date: date.toISOString().split("T")[0],
-        label: date.toLocaleDateString("en-US", { weekday: "short", day: "numeric" }),
-        fullLabel: date.toLocaleDateString("en-US", { weekday: "long", month: "short", day: "numeric" }),
+        label: date.toLocaleDateString("es-ES", { weekday: "short", day: "numeric" }),
+        fullLabel: date.toLocaleDateString("es-ES", { weekday: "long", month: "short", day: "numeric" }),
       })
     }
     return weekDays
@@ -239,9 +239,9 @@ export function WeeklySlotCalendar() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 <Calendar className="h-5 w-5" />
-                Weekly Schedule
+                Horario semanal
               </CardTitle>
-              <CardDescription>Click on time slots to assign or cancel classes for the week</CardDescription>
+              <CardDescription>Haz click en los bloque horarios para asignar o cancelar una clase para la semana</CardDescription>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={() => navigateWeek("prev")}>
@@ -259,7 +259,7 @@ export function WeeklySlotCalendar() {
         <CardContent>
           <div className="grid grid-cols-6 gap-2">
             {/* Header row */}
-            <div className="font-medium text-sm text-muted-foreground p-2">Time</div>
+            <div className="font-medium text-sm text-muted-foreground p-2">Bloques</div>
             {weekDays.map((day) => (
               <div key={day.date} className="font-medium text-sm text-center p-2">
                 {day.label}
@@ -297,12 +297,12 @@ export function WeeklySlotCalendar() {
                                 {bookedCount}/{existingSlot.capacity}
                               </span>
                             </div>
-                            <span>Assigned</span>
+                            <span>Asignada</span>
                           </>
                         ) : (
                           <>
                             <Plus className="h-3 w-3" />
-                            <span>Add</span>
+                            <span>Agregar</span>
                           </>
                         )}
                       </Button>
@@ -336,7 +336,7 @@ export function WeeklySlotCalendar() {
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="capacity">Capacity</Label>
+              <Label htmlFor="capacity">Capacidad</Label>
               <Input
                 id="capacity"
                 type="number"
@@ -353,7 +353,7 @@ export function WeeklySlotCalendar() {
                 <div className="flex items-center gap-2 text-sm">
                   <Users className="h-4 w-4" />
                   <span>
-                    Current bookings: {getBookedCount(existingSlot.id)} / {existingSlot.capacity}
+                    Inscripciones actuales: {getBookedCount(existingSlot.id)} / {existingSlot.capacity}
                   </span>
                 </div>
               </div>
@@ -368,7 +368,7 @@ export function WeeklySlotCalendar() {
                 setSelectedSlot(null)
               }}
             >
-              Cancel
+              Cancelar
             </Button>
 
             {existingSlot && (
@@ -378,7 +378,7 @@ export function WeeklySlotCalendar() {
                 disabled={isLoading || getBookedCount(existingSlot.id) > 0}
               >
                 <X className="h-4 w-4 mr-1" />
-                Delete
+                Borrar
               </Button>
             )}
 

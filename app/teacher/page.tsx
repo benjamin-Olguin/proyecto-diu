@@ -19,17 +19,17 @@ export default function TeacherPage() {
           <Link href="/">
             <Button variant="ghost" size="sm" className="gap-2">
               <ArrowLeft className="h-4 w-4" />
-              Back to Home
+              Volver al Inicio
             </Button>
           </Link>
-          <h2 className="text-xl font-semibold">Teacher Dashboard</h2>
+          <h2 className="text-xl font-semibold">Panel de control profesores</h2>
         </div>
       </header>
 
       <main className="container py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-balance">Teacher Dashboard</h1>
-          <p className="text-muted-foreground mt-2">Manage your time slots and view student bookings</p>
+          <h1 className="text-3xl font-bold text-balance">Panel de control profesores</h1>
+          <p className="text-muted-foreground mt-2"> Seleccione los bloques horarios de las clases y vea las inscripciones de los estudiantes</p>
         </div>
 
         <div className="flex gap-4 mb-6">
@@ -39,7 +39,7 @@ export default function TeacherPage() {
             className="gap-2"
           >
             <Calendar className="h-4 w-4" />
-            Manage Slots
+            Administrar horarios
           </Button>
           <Button
             variant={activeTab === "bookings" ? "default" : "outline"}
@@ -47,7 +47,7 @@ export default function TeacherPage() {
             className="gap-2"
           >
             <Users className="h-4 w-4" />
-            View Bookings
+            Ver inscripciones
           </Button>
         </div>
 

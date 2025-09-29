@@ -19,17 +19,17 @@ export default function StudentPage() {
           <Link href="/">
             <Button variant="ghost" size="sm" className="gap-2">
               <ArrowLeft className="h-4 w-4" />
-              Back to Home
+              Volver al inicio 
             </Button>
           </Link>
-          <h2 className="text-xl font-semibold">Student Dashboard</h2>
+          <h2 className="text-xl font-semibold">Panel de control estudiantes</h2>
         </div>
       </header>
 
       <main className="container py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-balance">Student Dashboard</h1>
-          <p className="text-muted-foreground mt-2">Book gym sessions and manage your schedule</p>
+          <h1 className="text-3xl font-bold text-balance">Panel de control estudiantes</h1>
+          <p className="text-muted-foreground mt-2">Inscribe clases y administra tu horario</p>
         </div>
 
         <div className="flex gap-4 mb-6">
@@ -39,7 +39,7 @@ export default function StudentPage() {
             className="gap-2"
           >
             <Calendar className="h-4 w-4" />
-            Book Sessions
+            Inscripcion clases 
           </Button>
           <Button
             variant={activeTab === "bookings" ? "default" : "outline"}
@@ -47,7 +47,7 @@ export default function StudentPage() {
             className="gap-2"
           >
             <BookOpen className="h-4 w-4" />
-            My Bookings
+            Mis clases
           </Button>
         </div>
 

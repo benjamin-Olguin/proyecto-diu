@@ -10,14 +10,14 @@ export default function HomePage() {
     <div className="min-h-screen bg-background">
       <header className="border-b bg-card">
         <div className="container flex h-16 items-center">
-          <h2 className="text-xl font-semibold">Gym Booking System</h2>
+          <h2 className="text-xl font-semibold">Sistema de horarios Defider</h2>
         </div>
       </header>
 
       <main className="container py-8">
         <div className="mb-8 text-center">
-          <h1 className="text-4xl font-bold text-balance mb-4">Welcome to Gym Booking System</h1>
-          <p className="text-muted-foreground text-lg">Choose your role to access the appropriate dashboard</p>
+          <h1 className="text-4xl font-bold text-balance mb-4">Bienvenido al sistema de horarios del Defider</h1>
+          <p className="text-muted-foreground text-lg">Elige tu rol para utilizar las funciones que necesitas</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
@@ -25,25 +25,25 @@ export default function HomePage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-xl">
                 <Calendar className="h-6 w-6 text-blue-600" />
-                Student Dashboard
+                Panel de Control Estudiantes
               </CardTitle>
               <CardDescription className="text-base">
-                Browse available gym time slots, book sessions, and manage your bookings
+                Revisa los horarios disponibles, agenda una clase y administra tus inscripciones
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <BookOpen className="h-4 w-4" />
-                  Book and cancel gym sessions
+                  Inscribe y cancela clases del gimnasio
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Calendar className="h-4 w-4" />
-                  View available time slots
+                  Ve los horarios disponibles
                 </div>
                 <Link href="/student">
                   <Button className="w-full mt-4" size="lg">
-                    Access Student Dashboard
+                    Acceder al panel de control Estudiantes
                   </Button>
                 </Link>
               </div>
@@ -54,25 +54,26 @@ export default function HomePage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 text-xl">
                 <Users className="h-6 w-6 text-green-600" />
-                Teacher Dashboard
+                Panel de Control Profesores
               </CardTitle>
               <CardDescription className="text-base">
-                Create and manage available time slots, view student bookings
+                Crea y administar los bloques horarios disponibles, revisa los estudiantes inscritos
+                
               </CardDescription>
             </CardHeader>
             <CardContent>
               <div className="space-y-3">
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Calendar className="h-4 w-4" />
-                  Create and manage time slots
+                  Crear y administar bloques horarios para las clases
                 </div>
                 <div className="flex items-center gap-2 text-sm text-muted-foreground">
                   <Users className="h-4 w-4" />
-                  View student bookings
+                  Ver las inscripciones de los estudiantes
                 </div>
                 <Link href="/teacher">
                   <Button className="w-full mt-4 bg-transparent" size="lg" variant="outline">
-                    Access Teacher Dashboard
+                   Acceder al panel de control Profesores
                   </Button>
                 </Link>
               </div>

@@ -189,7 +189,7 @@ export function SlotManagement() {
   }
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return new Date(dateString).toLocaleDateString("es-ES", {
       weekday: "short",
       year: "numeric",
       month: "short",
@@ -226,15 +226,15 @@ export function SlotManagement() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 <Calendar className="h-5 w-5" />
-                Manage Time Slots
+                Administrar bloques horarios
               </CardTitle>
-              <CardDescription>Create and manage your available gym time slots (Monday-Friday only)</CardDescription>
+              <CardDescription>Crea y administra bloques horarios (Solo de lunes a viernes)</CardDescription>
             </div>
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button className="gap-2">
                   <Plus className="h-4 w-4" />
-                  Add Slot
+                  Agregar clase
                 </Button>
               </DialogTrigger>
               <DialogContent>
@@ -247,7 +247,7 @@ export function SlotManagement() {
                 <form onSubmit={handleSubmit}>
                   <div className="space-y-4">
                     <div className="space-y-2">
-                      <Label htmlFor="date">Date</Label>
+                      <Label htmlFor="date">Fecha</Label>
                       <Input
                         id="date"
                         type="date"
@@ -257,12 +257,12 @@ export function SlotManagement() {
                         required
                       />
                       {formData.date && !isWeekday(formData.date) && (
-                        <p className="text-sm text-destructive">Gym is only open Monday through Friday</p>
+                        <p className="text-sm text-destructive">El gimansio solo esta abierto de lunes a viernes</p>
                       )}
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="timeSlot">Time Slot</Label>
+                      <Label htmlFor="timeSlot">Bloque horario</Label>
                       <Select
                         value={formData.selectedSlot?.id.toString() || ""}
                         onValueChange={(value) => {
@@ -272,7 +272,7 @@ export function SlotManagement() {
                         disabled={!formData.date || !isWeekday(formData.date)}
                       >
                         <SelectTrigger>
-                          <SelectValue placeholder="Select a time slot" />
+                          <SelectValue placeholder="Selecciona un bloque horario" />
                         </SelectTrigger>
                         <SelectContent>
                           {availableSlots.map((slot) => (
@@ -288,7 +288,7 @@ export function SlotManagement() {
                     </div>
 
                     <div className="space-y-2">
-                      <Label htmlFor="capacity">Capacity</Label>
+                      <Label htmlFor="capacity">Capacidad</Label>
                       <Input
                         id="capacity"
                         type="number"
@@ -357,7 +357,7 @@ export function SlotManagement() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Clock className="h-5 w-5" />
-            Upcoming Slots
+            Proximas clases
           </CardTitle>
           <CardDescription>Your scheduled time slots</CardDescription>
         </CardHeader>
@@ -397,7 +397,7 @@ export function SlotManagement() {
                             <div className="flex items-center gap-1">
                               <Users className="h-4 w-4" />
                               <span>
-                                {bookedCount} / {slot.capacity} booked
+                                {bookedCount} / {slot.capacity} inscritos
                               </span>
                             </div>
                           </div>
