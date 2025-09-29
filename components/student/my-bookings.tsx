@@ -89,16 +89,16 @@ export function MyBookings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BookOpen className="h-5 w-5" />
-            Active Bookings
+            Inscripciones activas 
           </CardTitle>
-          <CardDescription>Your current gym session bookings</CardDescription>
+          <CardDescription>Clases inscritas actualmente</CardDescription>
         </CardHeader>
         <CardContent>
           {activeBookings.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <BookOpen className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>You don't have any active bookings.</p>
-              <p className="text-sm">Book a time slot to get started!</p>
+              <p>No tienes inscripciones activas.</p>
+              <p className="text-sm">Inscriba un bloque para empezar</p>
             </div>
           ) : (
             <div className="space-y-4">

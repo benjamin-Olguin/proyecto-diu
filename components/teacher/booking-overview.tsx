@@ -80,7 +80,7 @@ export function BookingOverview() {
               <Calendar className="h-5 w-5 text-blue-500" />
               <div>
                 <p className="text-2xl font-bold">{upcomingSlots.length}</p>
-                <p className="text-sm text-muted-foreground">Upcoming Slots</p>
+                <p className="text-sm text-muted-foreground">Proximas clases</p>
               </div>
             </div>
           </CardContent>
@@ -92,7 +92,7 @@ export function BookingOverview() {
               <Users className="h-5 w-5 text-green-500" />
               <div>
                 <p className="text-2xl font-bold">{totalActiveBookings}</p>
-                <p className="text-sm text-muted-foreground">Active Bookings</p>
+                <p className="text-sm text-muted-foreground">Inscripciones activas</p>
               </div>
             </div>
           </CardContent>
@@ -104,7 +104,7 @@ export function BookingOverview() {
               <Clock className="h-5 w-5 text-orange-500" />
               <div>
                 <p className="text-2xl font-bold">{timeSlots.length}</p>
-                <p className="text-sm text-muted-foreground">Total Slots Created</p>
+                <p className="text-sm text-muted-foreground">Clases creadas</p>
               </div>
             </div>
           </CardContent>
@@ -116,16 +116,16 @@ export function BookingOverview() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Users className="h-5 w-5" />
-            Upcoming Sessions & Bookings
+            Proximos bloques disponibles  y clases
           </CardTitle>
-          <CardDescription>Students who have booked your upcoming time slots</CardDescription>
+          <CardDescription> Estudiantes que han inscrito tus proximos bloques horarios</CardDescription>
         </CardHeader>
         <CardContent>
           {upcomingSlots.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <Calendar className="h-12 w-12 mx-auto mb-4 opacity-50" />
-              <p>No upcoming sessions.</p>
-              <p className="text-sm">Create time slots to see student bookings here.</p>
+              <p>Sin sesiones proximas.</p>
+              <p className="text-sm"> Cree bloques horarios para ver los estudiantes inscritos aqui.</p>
             </div>
           ) : (
             <div className="space-y-6">
@@ -141,7 +141,7 @@ export function BookingOverview() {
                             <div className="flex items-center gap-2">
                               <span className="font-medium">{formatDate(slot.date)}</span>
                               <Badge variant={slotBookings.length > 0 ? "default" : "secondary"}>
-                                {slotBookings.length} / {slot.capacity} booked
+                                {slotBookings.length} / {slot.capacity} inscritos
                               </Badge>
                             </div>
                             <div className="flex items-center gap-2 text-sm text-muted-foreground">
@@ -155,7 +155,7 @@ export function BookingOverview() {
 
                         {slotBookings.length > 0 && (
                           <div className="space-y-2">
-                            <p className="text-sm font-medium text-muted-foreground">Students attending:</p>
+                            <p className="text-sm font-medium text-muted-foreground">Estudiantes asistiendo:</p>
                             <div className="flex flex-wrap gap-2">
                               {slotBookings.map((booking) => (
                                 <Badge key={booking.id} variant="outline" className="gap-1">
@@ -168,7 +168,7 @@ export function BookingOverview() {
                         )}
 
                         {slotBookings.length === 0 && (
-                          <p className="text-sm text-muted-foreground italic">No students have booked this slot yet.</p>
+                          <p className="text-sm text-muted-foreground italic"> Ningun estudiante ha inscrito este bloque aun.</p>
                         )}
                       </div>
                     </CardContent>

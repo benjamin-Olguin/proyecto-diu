@@ -166,7 +166,7 @@ export function WeeklyBookingCalendar() {
                 <Calendar className="h-5 w-5" />
                Horario semanal
               </CardTitle>
-              <CardDescription>View and book available gym slots for the week</CardDescription>
+              <CardDescription>Ve e inscribete en un bloque disponible esta semana</CardDescription>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={() => navigateWeek("prev")}>
@@ -184,7 +184,7 @@ export function WeeklyBookingCalendar() {
         <CardContent>
           <div className="grid grid-cols-6 gap-2">
             {/* Header row */}
-            <div className="font-medium text-sm text-muted-foreground p-2">Time</div>
+            <div className="font-medium text-sm text-muted-foreground p-2">Bloques</div>
             {weekDays.map((day) => (
               <div key={day.date} className="font-medium text-sm text-center p-2">
                 {day.label}
@@ -247,15 +247,15 @@ export function WeeklyBookingCalendar() {
                         {isBookedByUser ? (
                           <div className="flex items-center gap-1">
                             <CheckCircle className="h-3 w-3" />
-                            <span>Booked</span>
+                            <span>Inscrito</span>
                           </div>
                         ) : isFull ? (
                           <div className="flex items-center gap-1">
                             <XCircle className="h-3 w-3" />
-                            <span>Full</span>
+                            <span>Lleno</span>
                           </div>
                         ) : (
-                          <span>Book</span>
+                          <span>Inscribir</span>
                         )}
                       </Button>
                     </div>
@@ -273,19 +273,19 @@ export function WeeklyBookingCalendar() {
           <div className="flex flex-wrap gap-4 text-sm">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-green-500 rounded"></div>
-              <span>Your Bookings</span>
+              <span>Tus inscripciones</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 border border-gray-300 rounded"></div>
-              <span>Available</span>
+              <span>Disponible</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
-              <span>Fully Booked</span>
+              <span>Inscripciones llenas</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 border border-dashed border-gray-300 rounded"></div>
-              <span>Not Available</span>
+              <span>No disponible</span>
             </div>
           </div>
         </CardContent>
