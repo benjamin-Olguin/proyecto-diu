@@ -206,7 +206,7 @@ export function WeeklyBookingCalendar() {
                     return (
                       <div key={`${day.date}-${scheduleSlot.id}`} className="p-1">
                         <div className="w-full h-16 border border-dashed border-gray-300 rounded flex items-center justify-center text-xs text-muted-foreground">
-                          {isPast ? "Past" : "Not Available"}
+                          {isPast ? "Finalizó" : "No Disponible"}
                         </div>
                       </div>
                     )
