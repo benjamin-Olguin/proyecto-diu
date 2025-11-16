@@ -9,6 +9,7 @@ import { useAuth } from "@/hooks/use-auth"
 import { getTimeSlots, getBookings, saveBooking } from "@/lib/storage"
 import type { TimeSlot, Booking } from "@/lib/types"
 import { useToast } from "@/hooks/use-toast"
+import { ConfirmDialog } from "@/components/ui/confirm-dialog"
 
 export function MyBookings() {
   const { user } = useAuth()
@@ -16,6 +17,9 @@ export function MyBookings() {
   const [bookings, setBookings] = useState<Booking[]>([])
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
   const [isLoading, setIsLoading] = useState(false)
+
+  // para confirmar cancelación
+  const [bookingToCancel, setBookingToCancel] = useState<Booking | null>(null)
 
   useEffect(() => {
     loadData()
@@ -27,7 +31,6 @@ export function MyBookings() {
     const allBookings = getBookings()
     const allTimeSlots = getTimeSlots()
 
-    // Filter bookings for current user
     const userBookings = allBookings.filter((booking) => booking.studentId === user.id)
 
     setBookings(userBookings)
@@ -52,13 +55,13 @@ export function MyBookings() {
       loadData()
 
       toast({
-        title: "Booking Cancelled",
-        description: "Your booking has been successfully cancelled.",
+        title: "Inscripción cancelada",
+        description: "Tu inscripción ha sido cancelada correctamente.",
       })
     } catch (error) {
       toast({
-        title: "Cancellation Failed",
-        description: "There was an error cancelling your booking. Please try again.",
+        title: "Error al cancelar",
+        description: "Hubo un problema al cancelar tu inscripción. Inténtalo nuevamente.",
         variant: "destructive",
       })
     } finally {
@@ -70,7 +73,7 @@ export function MyBookings() {
   const cancelledBookings = bookings.filter((booking) => booking.status === "cancelled")
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString("en-US", {
+    return new Date(dateString).toLocaleDateString("es-ES", {
       weekday: "long",
       year: "numeric",
       month: "long",
@@ -89,16 +92,16 @@ export function MyBookings() {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <BookOpen className="h-5 w-5" />
-            Inscripciones activas 
+            Inscripciones activas
           </CardTitle>
-          <CardDescription>Clases inscritas actualmente</CardDescription>
+          <CardDescription>Revisa y, si lo necesitas, cancela tus clases agendadas.</CardDescription>
         </CardHeader>
         <CardContent>
           {activeBookings.length === 0 ? (
             <div className="text-center py-8 text-muted-foreground">
               <BookOpen className="h-12 w-12 mx-auto mb-4 opacity-50" />
               <p>No tienes inscripciones activas.</p>
-              <p className="text-sm">Inscriba un bloque para empezar</p>
+              <p className="text-sm">Inscríbete en un bloque desde el horario semanal para comenzar.</p>
             </div>
           ) : (
             <div className="space-y-4">
@@ -116,11 +119,7 @@ export function MyBookings() {
                           <div className="flex items-center gap-2">
                             <Calendar className="h-4 w-4 text-muted-foreground" />
                             <span className="font-medium">{formatDate(timeSlot.date)}</span>
-                            {upcoming ? (
-                              <Badge variant="default">Upcoming</Badge>
-                            ) : (
-                              <Badge variant="secondary">Past</Badge>
-                            )}
+                            {upcoming ? <Badge variant="default">Próxima</Badge> : <Badge variant="secondary">Pasada</Badge>}
                           </div>
                           <div className="flex items-center gap-2 text-sm text-muted-foreground">
                             <Clock className="h-4 w-4" />
@@ -129,7 +128,7 @@ export function MyBookings() {
                             </span>
                           </div>
                           <p className="text-xs text-muted-foreground">
-                            Booked on {new Date(booking.createdAt).toLocaleDateString()}
+                            Inscrito el {new Date(booking.createdAt).toLocaleDateString("es-ES")}
                           </p>
                         </div>
 
@@ -137,12 +136,12 @@ export function MyBookings() {
                           <Button
                             variant="outline"
                             size="sm"
-                            onClick={() => handleCancelBooking(booking)}
+                            onClick={() => setBookingToCancel(booking)}
                             disabled={isLoading}
                             className="text-destructive hover:text-destructive"
                           >
                             <XCircle className="h-4 w-4 mr-1" />
-                            Cancel
+                            Cancelar
                           </Button>
                         )}
                       </div>
@@ -160,9 +159,9 @@ export function MyBookings() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <XCircle className="h-5 w-5" />
-              Cancelled Bookings
+              Inscripciones canceladas
             </CardTitle>
-            <CardDescription>Your previously cancelled bookings</CardDescription>
+            <CardDescription>Historial de clases que has cancelado.</CardDescription>
           </CardHeader>
           <CardContent>
             <div className="space-y-4">
@@ -177,7 +176,7 @@ export function MyBookings() {
                         <div className="flex items-center gap-2">
                           <Calendar className="h-4 w-4 text-muted-foreground" />
                           <span className="font-medium">{formatDate(timeSlot.date)}</span>
-                          <Badge variant="destructive">Cancelled</Badge>
+                          <Badge variant="destructive">Cancelada</Badge>
                         </div>
                         <div className="flex items-center gap-2 text-sm text-muted-foreground">
                           <Clock className="h-4 w-4" />
@@ -186,7 +185,8 @@ export function MyBookings() {
                           </span>
                         </div>
                         <p className="text-xs text-muted-foreground">
-                          Cancelled on {booking.cancelledAt && new Date(booking.cancelledAt).toLocaleDateString()}
+                          Cancelada el{" "}
+                          {booking.cancelledAt && new Date(booking.cancelledAt).toLocaleDateString("es-ES")}
                         </p>
                       </div>
                     </CardContent>
@@ -197,6 +197,28 @@ export function MyBookings() {
           </CardContent>
         </Card>
       )}
+
+      {/* Diálogo de confirmación de cancelación */}
+      <ConfirmDialog
+        open={bookingToCancel !== null}
+        onClose={() => setBookingToCancel(null)}
+        onConfirm={() => {
+          if (bookingToCancel) {
+            void handleCancelBooking(bookingToCancel)
+          }
+        }}
+        title="Confirmar cancelación"
+        description={
+          bookingToCancel && (
+            <>
+              ¿Seguro que quieres cancelar esta inscripción? Tu cupo se liberará y podrá ser utilizado por otra persona.
+            </>
+          )
+        }
+        confirmLabel="Cancelar clase"
+        cancelLabel="Mantener inscripción"
+        destructive
+      />
     </div>
   )
 }

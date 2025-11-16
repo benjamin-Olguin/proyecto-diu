@@ -1,3 +1,4 @@
+// components/teacher/slot-management.tsx
 "use client"
 
 import type React from "react"

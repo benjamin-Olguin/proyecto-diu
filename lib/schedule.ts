@@ -1,3 +1,4 @@
+// lib/schedule.ts
 export interface ScheduleSlot {
   id: number
   startTime: string

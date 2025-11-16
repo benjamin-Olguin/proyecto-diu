@@ -8,6 +8,12 @@ import { getTimeSlots, getBookings, saveBooking, generateId, getUsers } from "@/
 import type { TimeSlot, Booking, User } from "@/lib/types"
 import { useToast } from "@/hooks/use-toast"
 import { DAILY_SCHEDULE, formatSlotTime, type ScheduleSlot } from "@/lib/schedule"
+import { ConfirmDialog } from "@/components/ui/confirm-dialog"
+
+type PendingAction =
+  | { type: "book"; slot: TimeSlot }
+  | { type: "cancel"; slot: TimeSlot }
+  | null
 
 export function WeeklyBookingCalendar() {
   const [user, setUser] = useState<User | null>(null)
@@ -16,6 +22,9 @@ export function WeeklyBookingCalendar() {
   const [timeSlots, setTimeSlots] = useState<TimeSlot[]>([])
   const [bookings, setBookings] = useState<Booking[]>([])
   const [isLoading, setIsLoading] = useState(false)
+
+  // para el pop-up de confirmación
+  const [pendingAction, setPendingAction] = useState<PendingAction>(null)
 
   useEffect(() => {
     const users = getUsers()
@@ -46,12 +55,11 @@ export function WeeklyBookingCalendar() {
   const getWeekDays = () => {
     const startOfWeek = new Date(currentWeek)
     const day = startOfWeek.getDay()
-    const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1) // Adjust when day is Sunday
+    const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1)
     startOfWeek.setDate(diff)
 
     const weekDays = []
     for (let i = 0; i < 5; i++) {
-      // Only Monday to Friday
       const date = new Date(startOfWeek)
       date.setDate(startOfWeek.getDate() + i)
       weekDays.push({
@@ -98,13 +106,13 @@ export function WeeklyBookingCalendar() {
       loadData()
 
       toast({
-        title: "Inscripcion aceptada",
-        description: `Te has inscrito exitosamente a la clase del bloque ${timeSlot.startTime} - ${timeSlot.endTime} .`,
+        title: "Inscripción confirmada",
+        description: `Te has inscrito en el bloque ${timeSlot.startTime} - ${timeSlot.endTime}.`,
       })
     } catch (error) {
       toast({
         title: "Error en la inscripción",
-        description: " Ha ocurrido un error al procesar tu inscripcion. Por favor intentelo de nuevo",
+        description: "Ha ocurrido un error al procesar tu inscripción. Por favor, inténtalo nuevamente.",
         variant: "destructive",
       })
     } finally {
@@ -133,14 +141,14 @@ export function WeeklyBookingCalendar() {
         loadData()
 
         toast({
-          title: "Booking Cancelled",
-          description: "Your booking has been successfully cancelled.",
+          title: "Inscripción cancelada",
+          description: "Tu inscripción ha sido cancelada correctamente.",
         })
       }
     } catch (error) {
       toast({
-        title: "Cancellation Failed",
-        description: "There was an error cancelling your booking. Please try again.",
+        title: "Error al cancelar",
+        description: "Hubo un problema al cancelar tu inscripción. Inténtalo nuevamente.",
         variant: "destructive",
       })
     } finally {
@@ -156,6 +164,22 @@ export function WeeklyBookingCalendar() {
 
   const weekDays = getWeekDays()
 
+  const confirmTitle =
+    pendingAction?.type === "book"
+      ? "Confirmar inscripción"
+      : pendingAction?.type === "cancel"
+        ? "Confirmar cancelación"
+        : ""
+
+  const confirmDescription =
+    pendingAction && pendingAction.slot
+      ? pendingAction.type === "book"
+        ? `¿Quieres inscribirte en este bloque del gimnasio DEFIDER? 
+Bloque ${pendingAction.slot.startTime} - ${pendingAction.slot.endTime}.`
+        : `¿Seguro que quieres cancelar tu inscripción en el bloque ${pendingAction.slot.startTime} - ${pendingAction.slot.endTime}? 
+Tu cupo quedará disponible para otro estudiante.`
+      : null
+
   return (
     <div className="space-y-6">
       <Card>
@@ -164,9 +188,13 @@ export function WeeklyBookingCalendar() {
             <div>
               <CardTitle className="flex items-center gap-2">
                 <Calendar className="h-5 w-5" />
-               Horario semanal
+                Horario semanal
               </CardTitle>
-              <CardDescription>Ve e inscribete en un bloque disponible esta semana</CardDescription>
+              <CardDescription>
+                Elige un bloque disponible para{" "}
+                <span className="font-semibold">inscribirte</span> o, si ya estás inscrito, para{" "}
+                <span className="font-semibold">cancelar</span> tu asistencia.
+              </CardDescription>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={() => navigateWeek("prev")}>
@@ -206,7 +234,7 @@ export function WeeklyBookingCalendar() {
                     return (
                       <div key={`${day.date}-${scheduleSlot.id}`} className="p-1">
                         <div className="w-full h-16 border border-dashed border-gray-300 rounded flex items-center justify-center text-xs text-muted-foreground">
-                          {isPast ? "Finalizó" : "No Disponible"}
+                          {isPast ? "Finalizó" : "No disponible"}
                         </div>
                       </div>
                     )
@@ -231,9 +259,9 @@ export function WeeklyBookingCalendar() {
                         }`}
                         onClick={() => {
                           if (isBookedByUser) {
-                            handleCancelBooking(availableSlot.id)
+                            setPendingAction({ type: "cancel", slot: availableSlot })
                           } else if (canBook) {
-                            handleBookSlot(availableSlot)
+                            setPendingAction({ type: "book", slot: availableSlot })
                           }
                         }}
                         disabled={isLoading || (!canBook && !isBookedByUser)}
@@ -267,29 +295,48 @@ export function WeeklyBookingCalendar() {
         </CardContent>
       </Card>
 
-      {/* Legend */}
+      {/* Leyenda */}
       <Card>
         <CardContent className="p-4">
           <div className="flex flex-wrap gap-4 text-sm">
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-green-500 rounded"></div>
-              <span>Tus inscripciones</span>
+              <div className="w-4 h-4 bg-green-500 rounded" />
+              <span>Bloques donde ya estás inscrito</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 border border-gray-300 rounded"></div>
-              <span>Disponible</span>
+              <div className="w-4 h-4 border border-gray-300 rounded" />
+              <span>Bloques disponibles</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 bg-red-100 border border-red-300 rounded"></div>
-              <span>Inscripciones llenas</span>
+              <div className="w-4 h-4 bg-red-100 border border-red-300 rounded" />
+              <span>Capacidad completa</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-4 border border-dashed border-gray-300 rounded"></div>
-              <span>No disponible</span>
+              <div className="w-4 h-4 border border-dashed border-gray-300 rounded" />
+              <span>No disponible / ya pasó</span>
             </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Diálogo de confirmación */}
+      <ConfirmDialog
+        open={pendingAction !== null}
+        title={confirmTitle}
+        description={confirmDescription}
+        confirmLabel={pendingAction?.type === "cancel" ? "Cancelar clase" : "Confirmar inscripción"}
+        cancelLabel={pendingAction?.type === "cancel" ? "Volver atrás" : "No inscribirme"}
+        destructive={pendingAction?.type === "cancel"}
+        onClose={() => setPendingAction(null)}
+        onConfirm={() => {
+          if (!pendingAction) return
+          if (pendingAction.type === "book") {
+            void handleBookSlot(pendingAction.slot)
+          } else {
+            void handleCancelBooking(pendingAction.slot.id)
+          }
+        }}
+      />
     </div>
   )
 }

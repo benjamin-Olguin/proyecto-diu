@@ -1,3 +1,4 @@
+// app/student/page.tsx
 "use client"
 
 import { useState } from "react"
@@ -19,7 +20,7 @@ export default function StudentPage() {
           <Link href="/">
             <Button variant="ghost" size="sm" className="gap-2">
               <ArrowLeft className="h-4 w-4" />
-              Volver al inicio 
+              Volver al inicio
             </Button>
           </Link>
           <h2 className="text-xl font-semibold">Panel de control estudiantes</h2>
@@ -28,8 +29,15 @@ export default function StudentPage() {
 
       <main className="container py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-balance">Panel de control estudiantes</h1>
-          <p className="text-muted-foreground mt-2">Inscribe clases y administra tu horario</p>
+          <h1 className="text-3xl font-bold text-balance">
+            Panel de control estudiantes
+          </h1>
+          <p className="text-muted-foreground mt-2">
+            Revisa los <span className="font-semibold">bloques disponibles</span>,
+            confirma tu inscripción en el gimnasio DEFIDER y administra tus clases.
+            Primero inscribe desde el <span className="font-semibold">Horario semanal</span> y luego
+            revisa o cancela tus inscripciones en <span className="font-semibold">Mis clases</span>.
+          </p>
         </div>
 
         <div className="flex gap-4 mb-6">
@@ -39,7 +47,7 @@ export default function StudentPage() {
             className="gap-2"
           >
             <Calendar className="h-4 w-4" />
-            Inscripcion clases 
+            Inscripción de clases
           </Button>
           <Button
             variant={activeTab === "bookings" ? "default" : "outline"}

@@ -1,3 +1,4 @@
+// lib/storage.ts
 import type { User, TimeSlot, Booking, GymSettings } from "./types"
 
 // Default gym settings

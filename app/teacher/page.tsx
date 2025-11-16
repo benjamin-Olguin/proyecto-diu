@@ -1,3 +1,4 @@
+// app/teacher/page.tsx
 "use client"
 
 import { useState } from "react"
@@ -19,7 +20,7 @@ export default function TeacherPage() {
           <Link href="/">
             <Button variant="ghost" size="sm" className="gap-2">
               <ArrowLeft className="h-4 w-4" />
-              Volver al Inicio
+              Volver al inicio
             </Button>
           </Link>
           <h2 className="text-xl font-semibold">Panel de control profesores</h2>
@@ -28,8 +29,15 @@ export default function TeacherPage() {
 
       <main className="container py-8">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-balance">Panel de control profesores</h1>
-          <p className="text-muted-foreground mt-2"> Seleccione los bloques horarios de las clases y vea las inscripciones de los estudiantes</p>
+          <h1 className="text-3xl font-bold text-balance">
+            Panel de control profesores
+          </h1>
+          <p className="text-muted-foreground mt-2">
+            Utiliza el <span className="font-semibold">horario semanal</span> para
+            <span className="font-semibold"> habilitar, editar o cancelar</span> bloques de clases del gimnasio DEFIDER.
+            Haz clic en un <span className="font-semibold">bloque vacío</span> para crear una clase,
+            o en un <span className="font-semibold">bloque azul</span> para ver las inscripciones y modificarlo.
+          </p>
         </div>
 
         <div className="flex gap-4 mb-6">

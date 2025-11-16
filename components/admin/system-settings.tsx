@@ -1,3 +1,4 @@
+// components/admin/system-settings.tsx
 "use client"
 
 import type React from "react"

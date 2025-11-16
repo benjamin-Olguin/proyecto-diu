@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { ConfirmDialog } from "@/components/ui/confirm-dialog"
 
 export function WeeklySlotCalendar() {
   const [user, setUser] = useState<User | null>(null)
@@ -29,6 +30,8 @@ export function WeeklySlotCalendar() {
   const [isDialogOpen, setIsDialogOpen] = useState(false)
   const [capacity, setCapacity] = useState(10)
   const [isLoading, setIsLoading] = useState(false)
+
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false)
 
   useEffect(() => {
     const users = getUsers()
@@ -54,7 +57,6 @@ export function WeeklySlotCalendar() {
     const allTimeSlots = getTimeSlots()
     const allBookings = getBookings()
 
-    // Filter time slots created by current teacher
     const teacherSlots = allTimeSlots.filter((slot) => slot.teacherId === user.id)
 
     setTimeSlots(teacherSlots)
@@ -64,12 +66,11 @@ export function WeeklySlotCalendar() {
   const getWeekDays = () => {
     const startOfWeek = new Date(currentWeek)
     const day = startOfWeek.getDay()
-    const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1) // Adjust when day is Sunday
+    const diff = startOfWeek.getDate() - day + (day === 0 ? -6 : 1)
     startOfWeek.setDate(diff)
 
     const weekDays = []
     for (let i = 0; i < 5; i++) {
-      // Only Monday to Friday
       const date = new Date(startOfWeek)
       date.setDate(startOfWeek.getDate() + i)
       weekDays.push({
@@ -95,17 +96,9 @@ export function WeeklySlotCalendar() {
   const handleSlotClick = (date: string, scheduleSlot: ScheduleSlot) => {
     const existingSlot = getSlotForDateTime(date, scheduleSlot)
 
-    if (existingSlot) {
-      // If slot exists, show options to edit or delete
-      setSelectedSlot({ date, scheduleSlot })
-      setCapacity(existingSlot.capacity)
-      setIsDialogOpen(true)
-    } else {
-      // If slot doesn't exist, create it
-      setSelectedSlot({ date, scheduleSlot })
-      setCapacity(10)
-      setIsDialogOpen(true)
-    }
+    setSelectedSlot({ date, scheduleSlot })
+    setCapacity(existingSlot ? existingSlot.capacity : 10)
+    setIsDialogOpen(true)
   }
 
   const handleCreateSlot = async () => {
@@ -129,8 +122,8 @@ export function WeeklySlotCalendar() {
       loadData()
 
       toast({
-        title: "Slot Created",
-        description: `Time slot for ${selectedSlot.scheduleSlot.label} on ${selectedSlot.date} has been created.`,
+        title: "Clase creada",
+        description: `Se habilitó el bloque ${selectedSlot.scheduleSlot.label} para el ${selectedSlot.date}.`,
       })
 
       setIsDialogOpen(false)
@@ -138,7 +131,7 @@ export function WeeklySlotCalendar() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "There was an error creating the time slot. Please try again.",
+        description: "Ocurrió un problema al crear el bloque. Inténtalo nuevamente.",
         variant: "destructive",
       })
     } finally {
@@ -164,8 +157,8 @@ export function WeeklySlotCalendar() {
       loadData()
 
       toast({
-        title: "Slot Updated",
-        description: `Time slot capacity has been updated to ${capacity}.`,
+        title: "Capacidad actualizada",
+        description: `La capacidad del bloque se actualizó a ${capacity} estudiantes.`,
       })
 
       setIsDialogOpen(false)
@@ -173,7 +166,7 @@ export function WeeklySlotCalendar() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "There was an error updating the time slot. Please try again.",
+        description: "Ocurrió un problema al actualizar el bloque.",
         variant: "destructive",
       })
     } finally {
@@ -191,8 +184,8 @@ export function WeeklySlotCalendar() {
 
     if (bookedCount > 0) {
       toast({
-        title: "Cannot Delete",
-        description: "This time slot has active bookings and cannot be deleted.",
+        title: "No se puede eliminar",
+        description: "Este bloque tiene inscripciones activas y no puede ser eliminado.",
         variant: "destructive",
       })
       return
@@ -205,8 +198,8 @@ export function WeeklySlotCalendar() {
       loadData()
 
       toast({
-        title: "Slot Deleted",
-        description: "Time slot has been deleted successfully.",
+        title: "Bloque eliminado",
+        description: "El bloque fue eliminado correctamente.",
       })
 
       setIsDialogOpen(false)
@@ -214,7 +207,7 @@ export function WeeklySlotCalendar() {
     } catch (error) {
       toast({
         title: "Error",
-        description: "There was an error deleting the time slot. Please try again.",
+        description: "Ocurrió un problema al eliminar el bloque.",
         variant: "destructive",
       })
     } finally {
@@ -241,7 +234,12 @@ export function WeeklySlotCalendar() {
                 <Calendar className="h-5 w-5" />
                 Horario semanal
               </CardTitle>
-              <CardDescription>Haz click en los bloque horarios para asignar o cancelar una clase para la semana</CardDescription>
+              <CardDescription>
+                Haz clic en un <span className="font-semibold">bloque vacío</span> para{" "}
+                <span className="font-semibold">habilitar una clase</span> y en un{" "}
+                <span className="font-semibold">bloque azul</span> para{" "}
+                <span className="font-semibold">editar la capacidad o eliminar la clase</span>.
+              </CardDescription>
             </div>
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" onClick={() => navigateWeek("prev")}>
@@ -258,7 +256,6 @@ export function WeeklySlotCalendar() {
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-6 gap-2">
-            {/* Header row */}
             <div className="font-medium text-sm text-muted-foreground p-2">Bloques</div>
             {weekDays.map((day) => (
               <div key={day.date} className="font-medium text-sm text-center p-2">
@@ -266,7 +263,6 @@ export function WeeklySlotCalendar() {
               </div>
             ))}
 
-            {/* Time slot rows */}
             {DAILY_SCHEDULE.map((scheduleSlot) => (
               <div key={scheduleSlot.id} className="contents">
                 <div className="text-xs p-2 border-r flex flex-col justify-center">
@@ -274,27 +270,27 @@ export function WeeklySlotCalendar() {
                   <div className="text-muted-foreground">{formatSlotTime(scheduleSlot)}</div>
                 </div>
                 {weekDays.map((day) => {
-                  const existingSlot = getSlotForDateTime(day.date, scheduleSlot)
-                  const bookedCount = existingSlot ? getBookedCount(existingSlot.id) : 0
+                  const slot = getSlotForDateTime(day.date, scheduleSlot)
+                  const bookedCount = slot ? getBookedCount(slot.id) : 0
                   const isPast = new Date(`${day.date}T${scheduleSlot.endTime}`) < new Date()
 
                   return (
                     <div key={`${day.date}-${scheduleSlot.id}`} className="p-1">
                       <Button
-                        variant={existingSlot ? "default" : "outline"}
+                        variant={slot ? "default" : "outline"}
                         size="sm"
                         className={`w-full h-16 flex flex-col gap-1 text-xs ${
                           isPast ? "opacity-50" : ""
-                        } ${existingSlot ? "bg-blue-500 hover:bg-blue-600" : ""}`}
+                        } ${slot ? "bg-blue-500 hover:bg-blue-600" : ""}`}
                         onClick={() => !isPast && handleSlotClick(day.date, scheduleSlot)}
                         disabled={isPast}
                       >
-                        {existingSlot ? (
+                        {slot ? (
                           <>
                             <div className="flex items-center gap-1">
                               <Users className="h-3 w-3" />
                               <span>
-                                {bookedCount}/{existingSlot.capacity}
+                                {bookedCount}/{slot.capacity}
                               </span>
                             </div>
                             <span>Asignada</span>
@@ -315,20 +311,22 @@ export function WeeklySlotCalendar() {
         </CardContent>
       </Card>
 
-      {/* Dialog for slot management */}
+      {/* Dialogo de gestión del bloque */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{existingSlot ? "Manage Time Slot" : "Create Time Slot"}</DialogTitle>
+            <DialogTitle>{existingSlot ? "Administrar bloque" : "Crear bloque"}</DialogTitle>
             <DialogDescription>
               {selectedSlot && (
                 <>
-                  {selectedSlot.scheduleSlot.label}: {formatSlotTime(selectedSlot.scheduleSlot)} on{" "}
-                  {new Date(selectedSlot.date).toLocaleDateString("en-US", {
+                  Bloque <strong>{selectedSlot.scheduleSlot.label}</strong> (
+                  {formatSlotTime(selectedSlot.scheduleSlot)}) el{" "}
+                  {new Date(selectedSlot.date).toLocaleDateString("es-ES", {
                     weekday: "long",
                     month: "long",
                     day: "numeric",
                   })}
+                  .
                 </>
               )}
             </DialogDescription>
@@ -336,7 +334,7 @@ export function WeeklySlotCalendar() {
 
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="capacity">Capacidad</Label>
+              <Label htmlFor="capacity">Capacidad de estudiantes</Label>
               <Input
                 id="capacity"
                 type="number"
@@ -368,26 +366,45 @@ export function WeeklySlotCalendar() {
                 setSelectedSlot(null)
               }}
             >
-              Cancelar
+              Cerrar
             </Button>
 
             {existingSlot && (
               <Button
                 variant="destructive"
-                onClick={handleDeleteSlot}
+                onClick={() => setConfirmDeleteOpen(true)}
                 disabled={isLoading || getBookedCount(existingSlot.id) > 0}
               >
                 <X className="h-4 w-4 mr-1" />
-                Borrar
+                Borrar bloque
               </Button>
             )}
 
             <Button onClick={existingSlot ? handleUpdateSlot : handleCreateSlot} disabled={isLoading}>
-              {isLoading ? "Saving..." : existingSlot ? "Update" : "Create"}
+              {isLoading ? "Guardando..." : existingSlot ? "Actualizar bloque" : "Crear bloque"}
             </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      {/* Confirmación extra para eliminar */}
+      <ConfirmDialog
+        open={confirmDeleteOpen}
+        onClose={() => setConfirmDeleteOpen(false)}
+        onConfirm={() => {
+          void handleDeleteSlot()
+        }}
+        title="Confirmar eliminación"
+        description={
+          <>
+            Si eliminas este bloque, las horas dejarán de estar disponibles para los estudiantes. Esta acción no se
+            puede deshacer.
+          </>
+        }
+        confirmLabel="Eliminar bloque"
+        cancelLabel="Cancelar"
+        destructive
+      />
     </div>
   )
 }
