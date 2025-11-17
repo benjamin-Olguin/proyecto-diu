@@ -1,3 +1,7 @@
-Integrantes:
-• Rodrigo Ramirez        ROL:202273526-0
-* Claudio Jiménez        Rol:202273587-2
+## 👥 Integrantes
+
+| Nombre | ROL |
+| :--- | :--- |
+| Rodrigo Ramírez | 202273526-0 |
+| Benjamín Olguín | 202273517-1 |
+| Claudio Jiménez | 202273587-2 |
